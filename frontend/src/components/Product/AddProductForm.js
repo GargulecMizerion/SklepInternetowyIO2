@@ -3,14 +3,17 @@ import { Form, Input, Button, message } from 'antd';
 import { addProduct } from './ProductService';
 import { FormWrapper } from './styles'; 
 
-const AddProductForm = () => {
+const AddProductForm = ({ onSuccess}) => {
     const [loading, setLoading] = useState(false);
+    const [form] = Form.useForm();
 
     const onFinish = async (values) => {
         setLoading(true);
         try {
             await addProduct(values);
             message.success('Product added successfully');
+            form.resetFields();
+            onSuccess();
         } catch (error) {
             message.error('Failed to add product');
         } finally {
@@ -21,6 +24,7 @@ const AddProductForm = () => {
     return (
         <FormWrapper>
             <Form
+                form={form}
                 name="addProduct"
                 onFinish={onFinish}
                 labelCol={{ span: 6 }}  
@@ -33,7 +37,7 @@ const AddProductForm = () => {
                 <Form.Item label="Description" name="description" rules={[{ required: true }]}>
                     <Input.TextArea />
                 </Form.Item>
-                <Form.Item label="Category ID" name="categoryId" rules={[{ required: true }]}>
+                <Form.Item label="Category ID" name="category_id" rules={[{ required: true }]}>
                     <Input />
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 6, span: 16 }}>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Modal, message, Input, Spin } from 'antd';
+import { Layout, Modal, message, Input, Spin, Alert } from 'antd';
 import ProductList from './ProductList';
 import AddProductForm from './AddProductForm';
 import {
@@ -19,7 +19,7 @@ const Product = () => {
     const [productId, setProductId] = useState('');
     const [searchedProduct, setSearchedProduct] = useState(null);
     const [loading, setLoading] = useState(false);
-
+    const [successMessage, setSuccessMessage] = useState('');
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -35,7 +35,10 @@ const Product = () => {
     }, []);
 
     const showModal = () => setIsModalVisible(true);
-    const handleOk = () => setIsModalVisible(false);
+    const handleOk = () => {
+        setIsModalVisible(false);
+        setSuccessMessage('Product added successfully');
+    };
     const handleCancel = () => setIsModalVisible(false);
 
     const handleSearch = async () => {
@@ -94,6 +97,16 @@ const Product = () => {
                 ) : null}
 
                 <ProductList products={products} />
+                
+                {successMessage && (
+                    <Alert
+                        message={successMessage}
+                        type="success"
+                        showIcon
+                        closable
+                        style={{ marginTop: '16px' }}
+                    />
+                )}
 
                 <Modal
                     title="Add Product"
@@ -102,7 +115,12 @@ const Product = () => {
                     onCancel={handleCancel}
                     footer={null}
                 >
-                    <AddProductForm />
+                    <AddProductForm 
+                        onSuccess={() => {
+                            handleOk(); 
+                            getAllProducts().then(setProducts);
+                        }}
+                    />
                 </Modal>
             </Content>
         </ProductContainer>
