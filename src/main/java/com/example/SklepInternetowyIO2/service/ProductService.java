@@ -43,6 +43,11 @@ public class ProductService {
         return getProductResponse(product);
     }
 
+    public List<ProductResponse> getProductsByCategory(Long categoryId){
+        List<Product> products = productRepository.findAllByCategoryOrSubcategories(categoryId);
+        return products.stream().map(this::getProductResponse).collect(Collectors.toList());
+    }
+
     private ProductResponse getProductResponse(Product product) {
         return new ProductResponse(
                 product.getId(),

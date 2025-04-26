@@ -13,4 +13,16 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, String> {
 
     Optional<Product> findProductById(Long id);
+
+    @Query(value = """
+    SELECT p.*
+    FROM "product" p
+    WHERE p."category_id" IN (
+        SELECT c."category_id"
+        FROM "category" c
+        START WITH c."category_id" = :categoryId
+        CONNECT BY PRIOR c."category_id" = c."parent_category_id"
+    )
+    """, nativeQuery = true)
+    List<Product> findAllByCategoryOrSubcategories(@Param("categoryId") Long categoryId);
 }
