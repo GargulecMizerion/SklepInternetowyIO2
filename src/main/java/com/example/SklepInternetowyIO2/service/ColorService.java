@@ -41,4 +41,10 @@ public class ColorService {
     private ColorResponse getColorResponse(Color color) {
         return new ColorResponse(color.getId(), color.getColor());
     }
+
+    public void deleteColor(Long id) {
+        Color color = colorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(String.format("Color with id %s not found", id)));
+        colorRepository.delete(color);
+    }
 }
