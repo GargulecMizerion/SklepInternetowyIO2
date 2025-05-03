@@ -20,6 +20,8 @@ const Product = () => {
     const [searchedProduct, setSearchedProduct] = useState(null);
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [hasSearched, setHasSearched] = useState(false); 
+
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -48,10 +50,12 @@ const Product = () => {
         }
 
         setLoading(true);
+        setHasSearched(true);
         try {
             const data = await getProductById(productId);
             setSearchedProduct(data);
         } catch (error) {
+            setSearchedProduct(null); 
             message.error('Product not found');
         } finally {
             setLoading(false);
@@ -83,7 +87,7 @@ const Product = () => {
 
                 {loading ? (
                     <Spin size="large" style={{ display: 'block', marginTop: '20px' }} />
-                ) : searchedProduct ? (
+                ) : hasSearched && searchedProduct ? (
                     <ProductDetailsCard>
                         <h3 style={{ color: '#f326be', marginBottom: '16px' }}>Product Details</h3>
                         <ProductDetailItem><span>Name:</span> {searchedProduct.name}</ProductDetailItem>
@@ -92,8 +96,13 @@ const Product = () => {
                             <span>Category:</span> {searchedProduct.category ? searchedProduct.category.name : 'No category'}
                         </ProductDetailItem>
                     </ProductDetailsCard>
-                ) : productId ? (
-                    <p style={{ marginTop: '20px' }}>No product found</p>
+                ) : hasSearched && !searchedProduct ? (
+                    <Alert
+                        message="Product not found"
+                        type="warning"
+                        showIcon
+                        style={{ marginTop: '20px' }}
+                    />
                 ) : null}
 
                 <ProductList products={products} />
