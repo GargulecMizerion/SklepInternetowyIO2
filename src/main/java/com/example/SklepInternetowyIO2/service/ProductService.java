@@ -56,4 +56,10 @@ public class ProductService {
                 new CategoryResponse(product.getCategoryId())
         );
     }
+
+    public void deleteProduct(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(String.format("Product with id %s not found", id)));
+        productRepository.delete(product);
+    }
 }
