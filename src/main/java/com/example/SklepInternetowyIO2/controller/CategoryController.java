@@ -8,10 +8,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/category")
@@ -30,5 +29,20 @@ public class CategoryController {
         Category category = categoryService.addCategory(categoryRequest);
         CategoryResponse categoryResponse = new CategoryResponse(category);
         return new ResponseEntity<>(categoryResponse, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public List<CategoryResponse> getAllCategories() {
+        return categoryService.getAllCategories();
+    }
+
+    @GetMapping("/{id}")
+    public CategoryResponse getCategory(@PathVariable Long id) {
+        return categoryService.getCategory(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
     }
 }
