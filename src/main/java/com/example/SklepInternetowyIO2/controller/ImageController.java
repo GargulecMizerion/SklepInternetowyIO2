@@ -41,4 +41,10 @@ public class ImageController {
     public ResponseEntity<ImageResponse> addImage(@RequestBody ImageRequest imageRequest) {
         return ResponseEntity.status(201).body(imageService.addImage(imageRequest));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteImage(@PathVariable Long id) {
+        imageService.deleteImage(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -62,6 +62,12 @@ public class ImageService {
         return toImageResponse(image);
     }
 
+    public void deleteImage(Long id) {
+        Image image = imageRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Image with ID " + id + " not found"));
+        imageRepository.delete(image);
+    }
+
     private ImageResponse toImageResponse(Image image) {
         return new ImageResponse(
                 image.getId(),
