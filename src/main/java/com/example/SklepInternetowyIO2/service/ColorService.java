@@ -34,8 +34,8 @@ public class ColorService {
     public ColorResponse addColor(ColorRequest colorRequest) {
         Color color = new Color();
         color.setColor(colorRequest.getColor());
-        colorRepository.save(color);
-        return getColorResponse(color);
+        Color savedColor = colorRepository.save(color);
+        return getColorResponse(savedColor);
     }
 
     private ColorResponse getColorResponse(Color color) {

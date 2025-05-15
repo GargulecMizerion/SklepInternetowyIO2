@@ -1,6 +1,7 @@
 package com.example.SklepInternetowyIO2.service;
 
 import com.example.SklepInternetowyIO2.model.assortment.Category;
+import com.example.SklepInternetowyIO2.model.assortment.Color;
 import com.example.SklepInternetowyIO2.model.assortment.Size;
 import com.example.SklepInternetowyIO2.repository.assortment.CategoryRepository;
 import com.example.SklepInternetowyIO2.repository.assortment.SizeRepository;
@@ -45,7 +46,8 @@ public class SizeService {
         size.setSizeValue(request.getSizeValue());
         size.setCategoryId(category);
         sizeRepository.save(size);
-        return mapToResponse(size);
+        Size savedSize = sizeRepository.save(size);
+        return mapToResponse(savedSize);
     }
 
     @Transactional
