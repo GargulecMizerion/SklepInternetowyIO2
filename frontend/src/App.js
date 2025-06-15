@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Layout, Button } from 'antd';
-import Product from './components/Product/Product'; 
-import Category from './components/Category/Category';  
 import Product from './components/Product/Product';
 import Category from './components/Category/Category';
 import Color from './components/Color/Color';
+import Image from './components/Image/Image';
 
 const { Content } = Layout;
 
@@ -21,6 +20,10 @@ const App = () => {
 
     const showColors = () => {
         setSelectedComponent('color');
+    };
+
+    const showImages = () => {
+        setSelectedComponent('image');
     };
 
     return (
@@ -47,10 +50,18 @@ const App = () => {
                 >
                     Color
                 </Button>
+                <Button
+                    type="primary"
+                    style={{ marginRight: '10px' }}
+                    onClick={showImages}
+                >
+                    Image
+                </Button>
 
                 {selectedComponent === 'product' && <Product />}
                 {selectedComponent === 'category' && <Category />}
                 {selectedComponent === 'color' && <Color />}
+                {selectedComponent === 'image' && <Image />}
             </Content>
         </Layout>
     );
