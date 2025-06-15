@@ -62,8 +62,8 @@ class ImageServiceTest {
         ImageResponse result = imageService.addImage(request);
 
         assertEquals(10L, result.getId());
-        assertEquals(1L, result.getProductId());
-        assertEquals(2L, result.getColorId());
+        assertEquals(1L, result.getProduct().getId());
+        assertEquals(2L, result.getColor().getId());
     }
 
     @Test
@@ -84,8 +84,8 @@ class ImageServiceTest {
         ImageResponse result = imageService.getImageById(10L);
 
         assertEquals(10L, result.getId());
-        assertEquals(1L, result.getProductId());
-        assertEquals(2L, result.getColorId());
+        assertEquals(1L, result.getProduct().getId());
+        assertEquals(2L, result.getColor().getId());
     }
 
     @Test
@@ -117,8 +117,8 @@ class ImageServiceTest {
 
         assertEquals(1, result.size());
         assertEquals(10L, result.get(0).getId());
-        assertEquals(1L, result.get(0).getProductId());
-        assertEquals(2L, result.get(0).getColorId());
+        assertEquals(1L, result.get(0).getProduct().getId());
+        assertEquals(2L, result.get(0).getColor().getId());
     }
 
     @Test
