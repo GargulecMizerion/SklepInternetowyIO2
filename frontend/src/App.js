@@ -4,6 +4,7 @@ import Product from './components/Product/Product';
 import Category from './components/Category/Category';  
 import Product from './components/Product/Product';
 import Category from './components/Category/Category';
+import Color from './components/Color/Color';
 
 const { Content } = Layout;
 
@@ -16,6 +17,10 @@ const App = () => {
 
     const showCategories = () => {
         setSelectedComponent('category');
+    };
+
+    const showColors = () => {
+        setSelectedComponent('color');
     };
 
     return (
@@ -35,9 +40,17 @@ const App = () => {
                 >
                     Category
                 </Button>
+                <Button
+                    type="primary"
+                    style={{ marginRight: '10px' }}
+                    onClick={showColors}
+                >
+                    Color
+                </Button>
 
                 {selectedComponent === 'product' && <Product />}
                 {selectedComponent === 'category' && <Category />}
+                {selectedComponent === 'color' && <Color />}
             </Content>
         </Layout>
     );
