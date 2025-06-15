@@ -11,6 +11,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ImageResponse implements Serializable {
     private Long id;
-    private Long productId;
-    private Long colorId;
+    private ProductResponse product;
+    private ColorResponse color;
 }

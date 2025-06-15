@@ -7,7 +7,9 @@ import com.example.SklepInternetowyIO2.repository.assortment.ColorRepository;
 import com.example.SklepInternetowyIO2.repository.assortment.ImageRepository;
 import com.example.SklepInternetowyIO2.repository.assortment.ProductRepository;
 import com.example.SklepInternetowyIO2.request.ImageRequest;
+import com.example.SklepInternetowyIO2.response.ColorResponse;
 import com.example.SklepInternetowyIO2.response.ImageResponse;
+import com.example.SklepInternetowyIO2.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,8 +73,8 @@ public class ImageService {
     private ImageResponse toImageResponse(Image image) {
         return new ImageResponse(
                 image.getId(),
-                image.getProductId().getId(),
-                image.getColorId().getId()
+                new ProductResponse(image.getProductId()),
+                new ColorResponse(image.getColorId())
         );
     }
 }

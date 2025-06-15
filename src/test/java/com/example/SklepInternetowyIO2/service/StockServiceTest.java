@@ -95,9 +95,9 @@ class StockServiceTest {
         StockResponse response = stockService.getStockById(10L);
 
         assertEquals(10L, response.getId());
-        assertEquals(1L, response.getProductId());
-        assertEquals(2L, response.getColorId());
-        assertEquals(3L, response.getSizeId());
+        assertEquals(1L, response.getProduct().getId());
+        assertEquals(2L, response.getColor().getId());
+        assertEquals(3L, response.getSize().getId());
         assertEquals(50, response.getQuantity());
         assertEquals(49.99f, response.getPrice(), 0.001);
     }
@@ -159,9 +159,9 @@ class StockServiceTest {
         StockResponse response = stockService.addStock(validRequest);
 
         assertEquals(10L, response.getId());
-        assertEquals(1L, response.getProductId());
-        assertEquals(2L, response.getColorId());
-        assertEquals(3L, response.getSizeId());
+        assertEquals(1L, response.getProduct().getId());
+        assertEquals(2L, response.getColor().getId());
+        assertEquals(3L, response.getSize().getId());
         assertEquals(40, response.getQuantity());
         assertEquals(39.99f, response.getPrice(), 0.001);
     }

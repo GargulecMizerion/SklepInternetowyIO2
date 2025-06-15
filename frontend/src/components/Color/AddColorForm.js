@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
-import { addProduct } from './ProductService';
+import { addColor } from './ColorService';
 import { FormWrapper } from '../shared/styles';
 
-const AddProductForm = ({ onSuccess }) => {
+const AddColorForm = ({ onSuccess }) => {
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
 
     const onFinish = async (values) => {
         setLoading(true);
         try {
-            await addProduct(values);
-            message.success('Product added successfully');
+            await addColor(values);
+            message.success('Color added successfully');
             form.resetFields();
             onSuccess();
         } catch (error) {
-            message.error('Failed to add product');
+            message.error('Failed to add color');
         } finally {
             setLoading(false);
         }
@@ -25,24 +25,18 @@ const AddProductForm = ({ onSuccess }) => {
         <FormWrapper>
             <Form
                 form={form}
-                name="addProduct"
+                name="addColor"
                 onFinish={onFinish}
-                labelCol={{ span: 6 }}  
+                labelCol={{ span: 6 }}
                 wrapperCol={{ span: 16 }}
                 autoComplete="off"
             >
-                <Form.Item label="Product Name" name="name" rules={[{ required: true }]}>
+                <Form.Item label="Color" name="color" rules={[{ required: true }]}>
                     <Input />
-                </Form.Item>
-                <Form.Item label="Description" name="description" rules={[{ required: true }]}>
-                    <Input.TextArea />
-                </Form.Item>
-                <Form.Item label="Category ID" name="category_id" rules={[{ required: true }]}>
-                    <Input type="number" />
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
                     <Button type="primary" htmlType="submit" loading={loading}>
-                        Add Product
+                        Add Color
                     </Button>
                 </Form.Item>
             </Form>
@@ -50,4 +44,4 @@ const AddProductForm = ({ onSuccess }) => {
     );
 };
 
-export default AddProductForm;
+export default AddColorForm;

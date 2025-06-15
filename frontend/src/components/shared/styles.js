@@ -29,7 +29,7 @@ export const FormWrapper = styled.div`
   }
 `;
 
-export const ProductContainer = styled.div`
+export const Container = styled.div`
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -37,7 +37,7 @@ export const ProductContainer = styled.div`
   margin: 20px 0;
 `;
 
-export const AddProductButton = styled(Button)`
+export const AddButton = styled(Button)`
   background-color: #f326be;
   color: white;
   border: none;
@@ -48,7 +48,7 @@ export const AddProductButton = styled(Button)`
   margin-bottom: 20px;
 `;
 
-export const SearchProductButton = styled(Button)`
+export const SearchButton = styled(Button)`
   background-color: #f326be;
   color: white;
   border: none;
@@ -56,7 +56,17 @@ export const SearchProductButton = styled(Button)`
     background-color: #c41196 !important;
     border-color: #c41196 !important;  
   }
-  margin-left: 10px; /* Dla lepszego odstępu od inputa */
+  margin-left: 10px;
+`;
+
+export const DeleteButton = styled(Button)`
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  &:hover {
+    background-color: #d9363e !important;
+    border-color: #d9363e !important;
+  }
 `;
 
 export const ModalContent = styled.div`
@@ -70,17 +80,17 @@ export const TableWrapper = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
-export const ProductDetailsCard = styled.div`
-  max-width: 400px;
+export const DetailsCard = styled.div`
+  width: 400px;
   background-color: #ffffff;
   border-radius: 12px;
   padding: 20px;
-  margin: 30px 0; /* góra/dół, bez auto */
+  margin: 30px 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-left: 6px solid #f326be;
 `;
 
-export const ProductDetailItem = styled.p`
+export const DetailItem = styled.p`
   font-size: 16px;
   margin-bottom: 12px;
   color: #333;
@@ -91,4 +101,3 @@ export const ProductDetailItem = styled.p`
     color: #111;
   }
 `;
-

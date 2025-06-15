@@ -9,6 +9,9 @@ import com.example.SklepInternetowyIO2.repository.assortment.ProductRepository;
 import com.example.SklepInternetowyIO2.repository.assortment.ColorRepository;
 import com.example.SklepInternetowyIO2.repository.assortment.SizeRepository;
 import com.example.SklepInternetowyIO2.request.StockRequest;
+import com.example.SklepInternetowyIO2.response.ColorResponse;
+import com.example.SklepInternetowyIO2.response.ProductResponse;
+import com.example.SklepInternetowyIO2.response.SizeResponse;
 import com.example.SklepInternetowyIO2.response.StockResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,9 +85,9 @@ public class StockService {
     private StockResponse toStockResponse(Stock stock) {
         return new StockResponse(
                 stock.getId(),
-                stock.getProduct().getId(),
-                stock.getSize().getId(),
-                stock.getColor().getId(),
+                new ProductResponse(stock.getProduct()),
+                new SizeResponse(stock.getSize()),
+                new ColorResponse(stock.getColor()),
                 stock.getQuantity(),
                 stock.getPrice()
         );

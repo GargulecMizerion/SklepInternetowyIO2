@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Modal, message, Input, Spin, Alert, Popconfirm } from 'antd';
-import ProductList from './ProductList';
-import AddProductForm from './AddProductForm';
+import StockList from './StockList';
+import AddStockForm from './AddStockForm';
 import {
     AddButton,
     Container,
@@ -10,54 +10,73 @@ import {
     DetailItem,
     DeleteButton
 } from '../shared/styles';
-import { getAllProducts, getProductById, getProductByCategoryId, deleteProductById } from './ProductService';
+import { getAllStock, getStockById, getStockByProductId, deleteStockById } from './StockService';
 
 const { Content } = Layout;
 
-const Product = () => {
-    const [products, setProducts] = useState([]);
+const Stock = () => {
+    const [stock, setStock] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [stockId, setStockId] = useState('');
     const [productId, setProductId] = useState('');
-    const [categoryId, setCategoryId] = useState('');
-    const [searchedProduct, setSearchedProduct] = useState(null);
+    const [searchedStock, setSearchedStock] = useState(null);
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [hasSearched, setHasSearched] = useState(false);
 
-    const deleteProduct = async (id) => {
+    const deleteStock = async (id) => {
         try {
-            await deleteProductById(id);
-            getAllProducts().then(setProducts);
-            if (searchedProduct) {
-                setSearchedProduct(prev => prev.filter(p => p.id !== id));
+            await deleteStockById(id);
+            getAllStock().then(setStock);
+            if (searchedStock) {
+                setSearchedStock(prev => prev.filter(p => p.id !== id));
             }
-            setSuccessMessage('Product deleted successfully');
-            message.success('Product deleted successfully');
+            setSuccessMessage('Stock deleted successfully');
+            message.success('Stock deleted successfully');
         } catch (error) {
-            message.error('Failed to delete product');
+            message.error('Failed to delete stock');
         }
     };
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchStock = async () => {
             try {
-                const data = await getAllProducts();
-                setProducts(data);
+                const data = await getAllStock();
+                setStock(data);
             } catch (error) {
-                message.error('Failed to fetch products');
+                message.error('Failed to fetch stock');
             }
         };
-        fetchProducts();
+        fetchStock();
     }, []);
 
     const showModal = () => setIsModalVisible(true);
     const handleOk = () => {
         setIsModalVisible(false);
-        setSuccessMessage('Product added successfully');
+        setSuccessMessage('Stock added successfully');
     };
     const handleCancel = () => setIsModalVisible(false);
 
     const handleSearch = async () => {
+        if (!stockId) {
+            message.error('Please enter a stock ID');
+            return;
+        }
+
+        setLoading(true);
+        setHasSearched(true);
+        try {
+            const data = await getStockById(stockId);
+            setSearchedStock([data]);
+        } catch (error) {
+            setSearchedStock(null);
+            message.error('Stock not found');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleProductSearch = async () => {
         if (!productId) {
             message.error('Please enter a product ID');
             return;
@@ -66,30 +85,11 @@ const Product = () => {
         setLoading(true);
         setHasSearched(true);
         try {
-            const data = await getProductById(productId);
-            setSearchedProduct([data]);
+            const data = await getStockByProductId(productId);
+            setSearchedStock(data);
         } catch (error) {
-            setSearchedProduct(null); 
-            message.error('Product not found');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleCategorySearch = async () => {
-        if (!categoryId) {
-            message.error('Please enter a category ID');
-            return;
-        }
-
-        setLoading(true);
-        setHasSearched(true);
-        try {
-            const data = await getProductByCategoryId(categoryId);
-            setSearchedProduct(data);
-        } catch (error) {
-            setSearchedProduct(null);
-            message.error('Product not found for this category ID');
+            setSearchedStock(null);
+            message.error('Stock not found for this product ID');
         } finally {
             setLoading(false);
         }
@@ -99,11 +99,26 @@ const Product = () => {
         <Container>
             <Content style={{ padding: '20px' }}>
                 <AddButton type="primary" onClick={showModal}>
-                    Add Product
+                    Add Stock
                 </AddButton>
 
                 <div style={{ marginBottom: '20px' }}>
                     <div style={{ marginBottom: '10px' }}>
+                        <Input
+                            placeholder="Enter Stock ID"
+                            value={stockId}
+                            onChange={(e) => setStockId(e.target.value)}
+                            style={{ width: '200px', marginBottom: '10px' }}
+                        />
+                        <SearchButton
+                            type="primary"
+                            onClick={handleSearch}
+                            loading={loading}
+                        >
+                            Search by Stock ID
+                        </SearchButton>
+                    </div>
+                    <div>
                         <Input
                             placeholder="Enter Product ID"
                             value={productId}
@@ -112,46 +127,37 @@ const Product = () => {
                         />
                         <SearchButton
                             type="primary"
-                            onClick={handleSearch}
+                            onClick={handleProductSearch}
                             loading={loading}
                         >
                             Search by Product ID
-                        </SearchButton>
-                    </div>
-                    <div>
-                        <Input
-                            placeholder="Enter Category ID"
-                            value={categoryId}
-                            onChange={(e) => setCategoryId(e.target.value)}
-                            style={{ width: '200px', marginBottom: '10px' }}
-                        />
-                        <SearchButton
-                            type="primary"
-                            onClick={handleCategorySearch}
-                            loading={loading}
-                        >
-                            Search by Category ID
                         </SearchButton>
                     </div>
                 </div>
 
                 {loading ? (
                     <Spin size="large" style={{ display: 'block', marginTop: '20px' }} />
-                ) : hasSearched && Array.isArray(searchedProduct) && searchedProduct.length > 0 ? (
+                ) : hasSearched && Array.isArray(searchedStock) && searchedStock.length > 0 ? (
                     <>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px', margin: '30px 0' }}>
-                            {searchedProduct.map((img) => (
+                            {searchedStock.map((img) => (
                                 <DetailsCard key={img.id} style={{ margin: '0px', position: 'relative' }}>
-                                    <h3 style={{ color: '#f326be', marginBottom: '16px' }}>Product Details</h3>
+                                    <h3 style={{ color: '#f326be', marginBottom: '16px' }}>Stock Details</h3>
                                     <DetailItem><span>ID:</span> {img.id}</DetailItem>
-                                    <DetailItem><span>Name:</span> {img.name}</DetailItem>
-                                    <DetailItem><span>Description:</span> {img.description}</DetailItem>
                                     <DetailItem>
-                                        <span>Category:</span> {img.category ? img.category.name : 'No category'}
+                                        <span>Product:</span> {img.product ? img.product.name : 'No product'}
                                     </DetailItem>
+                                    <DetailItem>
+                                        <span>Size:</span> {img.size ? img.size.sizeValue : 'No size'}
+                                    </DetailItem>
+                                    <DetailItem>
+                                        <span>Color:</span> {img.color ? img.color.color : 'No color'}
+                                    </DetailItem>
+                                    <DetailItem><span>Quantity:</span> {img.quantity}</DetailItem>
+                                    <DetailItem><span>Price:</span> {img.price}</DetailItem>
                                     <Popconfirm
-                                        title="Are you sure you want to delete this product?"
-                                        onConfirm={() => deleteProduct(img.id)}
+                                        title="Are you sure you want to delete this stock?"
+                                        onConfirm={() => deleteStock(img.id)}
                                         okText="Yes"
                                         cancelText="No"
                                     >
@@ -165,18 +171,18 @@ const Product = () => {
                     </>
                 ) : hasSearched ? (
                     <Alert
-                        message="Product(s) not found"
+                        message="Stock not found"
                         type="warning"
                         showIcon
                         style={{ margin: '20px 0' }}
                     />
                 ) : null}
 
-                <ProductList
-                    products={products}
-                    onDelete={deleteProduct}
+                <StockList
+                    stock={stock}
+                    onDelete={deleteStock}
                 />
-                
+
                 {successMessage && (
                     <Alert
                         message={successMessage}
@@ -188,16 +194,16 @@ const Product = () => {
                 )}
 
                 <Modal
-                    title="Add Product"
+                    title="Add Stock"
                     open={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                     footer={null}
                 >
-                    <AddProductForm 
+                    <AddStockForm
                         onSuccess={() => {
-                            handleOk(); 
-                            getAllProducts().then(setProducts);
+                            handleOk();
+                            getAllStock().then(setStock);
                         }}
                     />
                 </Modal>
@@ -206,4 +212,4 @@ const Product = () => {
     );
 };
 
-export default Product;
+export default Stock;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Modal, message, Input, Spin, Alert, Popconfirm } from 'antd';
-import CategoryList from './CategoryList';
-import AddCategoryForm from './AddCategoryForm';
+import ColorList from './ColorList';
+import AddColorForm from './AddColorForm';
 import {
     AddButton,
     Container,
@@ -10,66 +10,66 @@ import {
     DetailItem,
     DeleteButton
 } from '../shared/styles';
-import { getAllCategories, getCategoryById, deleteCategoryById } from './CategoryService';
+import { getAllColors, getColorById, deleteColorById } from './ColorService';
 
 const { Content } = Layout;
 
-const Category = () => {
-    const [categories, setCategories] = useState([]);
+const Color = () => {
+    const [colors, setColors] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [categoryId, setCategoryId] = useState('');
-    const [searchedCategory, setSearchedCategory] = useState(null);
+    const [colorId, setColorId] = useState('');
+    const [searchedColor, setSearchedColor] = useState(null);
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [hasSearched, setHasSearched] = useState(false);
 
-    const deleteCategory = async (id) => {
+    const deleteColor = async (id) => {
             try {
-                await deleteCategoryById(id);
-                getAllCategories().then(setCategories);
-                if (searchedCategory) {
-                    setSearchedCategory(null);
+                await deleteColorById(id);
+                getAllColors().then(setColors);
+                if (searchedColor) {
+                    setSearchedColor(null);
                 }
-                setSuccessMessage('Category deleted successfully');
-                message.success('Category deleted successfully');
+                setSuccessMessage('Color deleted successfully');
+                message.success('Color deleted successfully');
             } catch (error) {
-                message.error('Failed to delete category');
+                message.error('Failed to delete color');
             }
         };
 
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchColors = async () => {
             try {
-                const data = await getAllCategories();
-                setCategories(data);
+                const data = await getAllColors();
+                setColors(data);
             } catch (error) {
-                message.error('Failed to fetch categories');
+                message.error('Failed to fetch colors');
             }
         };
-        fetchCategories();
+        fetchColors();
     }, []);
 
     const showModal = () => setIsModalVisible(true);
     const handleOk = () => {
         setIsModalVisible(false);
-        setSuccessMessage('Category added successfully');
+        setSuccessMessage('Color added successfully');
     };
     const handleCancel = () => setIsModalVisible(false);
 
     const handleSearch = async () => {
-        if (!categoryId) {
-            message.error('Please enter a category ID');
+        if (!colorId) {
+            message.error('Please enter a color ID');
             return;
         }
 
         setLoading(true);
         setHasSearched(true);
         try {
-            const data = await getCategoryById(categoryId);
-            setSearchedCategory(data);
+            const data = await getColorById(colorId);
+            setSearchedColor(data);
         } catch (error) {
-            setSearchedCategory(null);
-            message.error('Category not found');
+            setSearchedColor(null);
+            message.error('Color not found');
         } finally {
             setLoading(false);
         }
@@ -79,14 +79,14 @@ const Category = () => {
         <Container>
             <Content style={{ padding: '20px' }}>
                 <AddButton type="primary" onClick={showModal}>
-                    Add Category
+                    Add Color
                 </AddButton>
 
                 <div style={{ marginBottom: '20px' }}>
                     <Input
-                        placeholder="Enter Category ID"
-                        value={categoryId}
-                        onChange={(e) => setCategoryId(e.target.value)}
+                        placeholder="Enter Color ID"
+                        value={colorId}
+                        onChange={(e) => setColorId(e.target.value)}
                         style={{ width: '200px', marginBottom: '10px' }}
                     />
                     <SearchButton
@@ -94,23 +94,20 @@ const Category = () => {
                         onClick={handleSearch}
                         loading={loading}
                     >
-                        Search Category
+                        Search Color
                     </SearchButton>
                 </div>
 
                 {loading ? (
                     <Spin size="large" style={{ display: 'block', marginTop: '20px' }} />
-                ) : hasSearched && searchedCategory ? (
+                ) : hasSearched && searchedColor ? (
                     <DetailsCard style={{ position: 'relative' }}>
-                        <h3 style={{ color: '#f326be', marginBottom: '16px' }}>Category Details</h3>
-                        <DetailItem><span>ID:</span> {searchedCategory.id}</DetailItem>
-                        <DetailItem><span>Name:</span> {searchedCategory.name}</DetailItem>
-                        <DetailItem>
-                            <span>Parent Category:</span> {searchedCategory.parentCategory ? searchedCategory.parentCategory.name : 'None'}
-                        </DetailItem>
+                        <h3 style={{ color: '#f326be', marginBottom: '16px' }}>Color Details</h3>
+                        <DetailItem><span>ID:</span> {searchedColor.id}</DetailItem>
+                        <DetailItem><span>Color:</span> {searchedColor.color}</DetailItem>
                         <Popconfirm
-                            title="Are you sure you want to delete this category?"
-                            onConfirm={() => deleteCategory(searchedCategory.id)}
+                            title="Are you sure you want to delete this color?"
+                            onConfirm={() => deleteColor(searchedColor.id)}
                             okText="Yes"
                             cancelText="No"
                         >
@@ -119,18 +116,18 @@ const Category = () => {
                             </DeleteButton>
                         </Popconfirm>
                     </DetailsCard>
-                ) : hasSearched && !searchedCategory ? (
+                ) : hasSearched && !searchedColor ? (
                     <Alert
-                        message="Category not found"
+                        message="Color not found"
                         type="warning"
                         showIcon
                         style={{ margin: '20px 0' }}
                     />
                 ) : null}
 
-                <CategoryList
-                    categories={categories}
-                    onDelete={deleteCategory}
+                <ColorList
+                    colors={colors}
+                    onDelete={deleteColor}
                 />
 
                 {successMessage && (
@@ -144,16 +141,16 @@ const Category = () => {
                 )}
 
                 <Modal
-                    title="Add Category"
+                    title="Add Color"
                     open={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                     footer={null}
                 >
-                    <AddCategoryForm
+                    <AddColorForm
                         onSuccess={() => {
                             handleOk();
-                            getAllCategories().then(setCategories);
+                            getAllColors().then(setColors);
                         }}
                     />
                 </Modal>
@@ -162,4 +159,4 @@ const Category = () => {
     );
 };
 
-export default Category;
+export default Color;

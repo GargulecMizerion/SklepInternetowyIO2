@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Modal, message, Input, Spin, Alert, Popconfirm } from 'antd';
-import CategoryList from './CategoryList';
-import AddCategoryForm from './AddCategoryForm';
+import SizeList from './SizeList';
+import AddSizeForm from './AddSizeForm';
 import {
     AddButton,
     Container,
@@ -10,66 +10,66 @@ import {
     DetailItem,
     DeleteButton
 } from '../shared/styles';
-import { getAllCategories, getCategoryById, deleteCategoryById } from './CategoryService';
+import { getAllSizes, getSizeById, deleteSizeById } from './SizeService';
 
 const { Content } = Layout;
 
-const Category = () => {
-    const [categories, setCategories] = useState([]);
+const Size = () => {
+    const [sizes, setSizes] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [categoryId, setCategoryId] = useState('');
-    const [searchedCategory, setSearchedCategory] = useState(null);
+    const [sizeId, setSizeId] = useState('');
+    const [searchedSize, setSearchedSize] = useState(null);
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [hasSearched, setHasSearched] = useState(false);
 
-    const deleteCategory = async (id) => {
+    const deleteSize = async (id) => {
             try {
-                await deleteCategoryById(id);
-                getAllCategories().then(setCategories);
-                if (searchedCategory) {
-                    setSearchedCategory(null);
+                await deleteSizeById(id);
+                getAllSizes().then(setSizes);
+                if (searchedSize) {
+                    setSearchedSize(null);
                 }
-                setSuccessMessage('Category deleted successfully');
-                message.success('Category deleted successfully');
+                setSuccessMessage('Size deleted successfully');
+                message.success('Size deleted successfully');
             } catch (error) {
-                message.error('Failed to delete category');
+                message.error('Failed to delete size');
             }
         };
 
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchSizes = async () => {
             try {
-                const data = await getAllCategories();
-                setCategories(data);
+                const data = await getAllSizes();
+                setSizes(data);
             } catch (error) {
-                message.error('Failed to fetch categories');
+                message.error('Failed to fetch sizes');
             }
         };
-        fetchCategories();
+        fetchSizes();
     }, []);
 
     const showModal = () => setIsModalVisible(true);
     const handleOk = () => {
         setIsModalVisible(false);
-        setSuccessMessage('Category added successfully');
+        setSuccessMessage('Size added successfully');
     };
     const handleCancel = () => setIsModalVisible(false);
 
     const handleSearch = async () => {
-        if (!categoryId) {
-            message.error('Please enter a category ID');
+        if (!sizeId) {
+            message.error('Please enter a size ID');
             return;
         }
 
         setLoading(true);
         setHasSearched(true);
         try {
-            const data = await getCategoryById(categoryId);
-            setSearchedCategory(data);
+            const data = await getSizeById(sizeId);
+            setSearchedSize(data);
         } catch (error) {
-            setSearchedCategory(null);
-            message.error('Category not found');
+            setSearchedSize(null);
+            message.error('Size not found');
         } finally {
             setLoading(false);
         }
@@ -79,14 +79,14 @@ const Category = () => {
         <Container>
             <Content style={{ padding: '20px' }}>
                 <AddButton type="primary" onClick={showModal}>
-                    Add Category
+                    Add Size
                 </AddButton>
 
                 <div style={{ marginBottom: '20px' }}>
                     <Input
-                        placeholder="Enter Category ID"
-                        value={categoryId}
-                        onChange={(e) => setCategoryId(e.target.value)}
+                        placeholder="Enter Size ID"
+                        value={sizeId}
+                        onChange={(e) => setSizeId(e.target.value)}
                         style={{ width: '200px', marginBottom: '10px' }}
                     />
                     <SearchButton
@@ -94,23 +94,23 @@ const Category = () => {
                         onClick={handleSearch}
                         loading={loading}
                     >
-                        Search Category
+                        Search Size
                     </SearchButton>
                 </div>
 
                 {loading ? (
                     <Spin size="large" style={{ display: 'block', marginTop: '20px' }} />
-                ) : hasSearched && searchedCategory ? (
+                ) : hasSearched && searchedSize ? (
                     <DetailsCard style={{ position: 'relative' }}>
-                        <h3 style={{ color: '#f326be', marginBottom: '16px' }}>Category Details</h3>
-                        <DetailItem><span>ID:</span> {searchedCategory.id}</DetailItem>
-                        <DetailItem><span>Name:</span> {searchedCategory.name}</DetailItem>
+                        <h3 style={{ size: '#f326be', marginBottom: '16px' }}>Size Details</h3>
+                        <DetailItem><span>ID:</span> {searchedSize.id}</DetailItem>
+                        <DetailItem><span>Size:</span> {searchedSize.sizeValue}</DetailItem>
                         <DetailItem>
-                            <span>Parent Category:</span> {searchedCategory.parentCategory ? searchedCategory.parentCategory.name : 'None'}
+                            <span>Category:</span> {searchedSize.category ? searchedSize.category.name : 'No category'}
                         </DetailItem>
                         <Popconfirm
-                            title="Are you sure you want to delete this category?"
-                            onConfirm={() => deleteCategory(searchedCategory.id)}
+                            title="Are you sure you want to delete this size?"
+                            onConfirm={() => deleteSize(searchedSize.id)}
                             okText="Yes"
                             cancelText="No"
                         >
@@ -119,18 +119,18 @@ const Category = () => {
                             </DeleteButton>
                         </Popconfirm>
                     </DetailsCard>
-                ) : hasSearched && !searchedCategory ? (
+                ) : hasSearched && !searchedSize ? (
                     <Alert
-                        message="Category not found"
+                        message="Size not found"
                         type="warning"
                         showIcon
                         style={{ margin: '20px 0' }}
                     />
                 ) : null}
 
-                <CategoryList
-                    categories={categories}
-                    onDelete={deleteCategory}
+                <SizeList
+                    sizes={sizes}
+                    onDelete={deleteSize}
                 />
 
                 {successMessage && (
@@ -144,16 +144,16 @@ const Category = () => {
                 )}
 
                 <Modal
-                    title="Add Category"
+                    title="Add Size"
                     open={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                     footer={null}
                 >
-                    <AddCategoryForm
+                    <AddSizeForm
                         onSuccess={() => {
                             handleOk();
-                            getAllCategories().then(setCategories);
+                            getAllSizes().then(setSizes);
                         }}
                     />
                 </Modal>
@@ -162,4 +162,4 @@ const Category = () => {
     );
 };
 
-export default Category;
+export default Size;
