@@ -4,6 +4,7 @@ import Product from './components/Product/Product';
 import Category from './components/Category/Category';
 import Color from './components/Color/Color';
 import Image from './components/Image/Image';
+import Size from './components/Size/Size';
 
 const { Content } = Layout;
 
@@ -24,6 +25,10 @@ const App = () => {
 
     const showImages = () => {
         setSelectedComponent('image');
+    };
+
+    const showSizes = () => {
+        setSelectedComponent('size');
     };
 
     return (
@@ -57,11 +62,19 @@ const App = () => {
                 >
                     Image
                 </Button>
+                <Button
+                    type="primary"
+                    style={{ marginRight: '10px' }}
+                    onClick={showSizes}
+                >
+                    Size
+                </Button>
 
                 {selectedComponent === 'product' && <Product />}
                 {selectedComponent === 'category' && <Category />}
                 {selectedComponent === 'color' && <Color />}
                 {selectedComponent === 'image' && <Image />}
+                {selectedComponent === 'size' && <Size />}
             </Content>
         </Layout>
     );
