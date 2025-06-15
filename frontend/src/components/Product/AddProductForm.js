@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { addProduct } from './ProductService';
-import { FormWrapper } from './styles'; 
+import { FormWrapper } from '../shared/styles';
 
-const AddProductForm = ({ onSuccess}) => {
+const AddProductForm = ({ onSuccess }) => {
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
 
@@ -38,7 +38,7 @@ const AddProductForm = ({ onSuccess}) => {
                     <Input.TextArea />
                 </Form.Item>
                 <Form.Item label="Category ID" name="category_id" rules={[{ required: true }]}>
-                    <Input />
+                    <Input type="number" />
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
                     <Button type="primary" htmlType="submit" loading={loading}>

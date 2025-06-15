@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Layout, Button } from 'antd';
 import Product from './components/Product/Product'; 
 import Category from './components/Category/Category';  
+import Product from './components/Product/Product';
+import Category from './components/Category/Category';
 
 const { Content } = Layout;
 
@@ -28,6 +30,7 @@ const App = () => {
                 </Button>
                 <Button
                     type="primary"
+                    style={{ marginRight: '10px' }}
                     onClick={showCategories}
                 >
                     Category
