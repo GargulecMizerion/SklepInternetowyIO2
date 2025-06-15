@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
-import { addSize } from './SizeService';
+import { addStock } from './StockService';
 import { FormWrapper } from '../shared/styles';
 
-const AddSizeForm = ({ onSuccess }) => {
+const AddStockForm = ({ onSuccess }) => {
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
 
     const onFinish = async (values) => {
         setLoading(true);
         try {
-            await addSize(values);
-            message.success('Size added successfully');
+            await addStock(values);
+            message.success('Stock added successfully');
             form.resetFields();
             onSuccess();
         } catch (error) {
-            message.error('Failed to add size');
+            message.error('Failed to add stock');
         } finally {
             setLoading(false);
         }
@@ -25,21 +25,30 @@ const AddSizeForm = ({ onSuccess }) => {
         <FormWrapper>
             <Form
                 form={form}
-                name="addSize"
+                name="addStock"
                 onFinish={onFinish}
                 labelCol={{ span: 6 }}
                 wrapperCol={{ span: 16 }}
                 autoComplete="off"
             >
-                <Form.Item label="Size" name="size_value" rules={[{ required: true }]}>
-                    <Input />
+                <Form.Item label="Product ID" name="productId" rules={[{ required: true }]}>
+                    <Input type="number" />
                 </Form.Item>
-                <Form.Item label="Category ID" name="category_id" rules={[{ required: true }]}>
+                <Form.Item label="Size ID" name="sizeId" rules={[{ required: true }]}>
+                    <Input type="number" />
+                </Form.Item>
+                <Form.Item label="Color ID" name="colorId" rules={[{ required: true }]}>
+                    <Input type="number" />
+                </Form.Item>
+                <Form.Item label="Quantity" name="quantity" rules={[{ required: true }]}>
+                    <Input type="number" />
+                </Form.Item>
+                <Form.Item label="Price" name="price" rules={[{ required: true }]}>
                     <Input type="number" />
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
                     <Button type="primary" htmlType="submit" loading={loading}>
-                        Add Size
+                        Add Stock
                     </Button>
                 </Form.Item>
             </Form>
@@ -47,4 +56,4 @@ const AddSizeForm = ({ onSuccess }) => {
     );
 };
 
-export default AddSizeForm;
+export default AddStockForm;

@@ -5,6 +5,7 @@ import Category from './components/Category/Category';
 import Color from './components/Color/Color';
 import Image from './components/Image/Image';
 import Size from './components/Size/Size';
+import Stock from './components/Stock/Stock';
 
 const { Content } = Layout;
 
@@ -29,6 +30,10 @@ const App = () => {
 
     const showSizes = () => {
         setSelectedComponent('size');
+    };
+
+    const showStock = () => {
+        setSelectedComponent('stock');
     };
 
     return (
@@ -69,12 +74,19 @@ const App = () => {
                 >
                     Size
                 </Button>
+                <Button
+                    type="primary"
+                    onClick={showStock}
+                >
+                    Stock
+                </Button>
 
                 {selectedComponent === 'product' && <Product />}
                 {selectedComponent === 'category' && <Category />}
                 {selectedComponent === 'color' && <Color />}
                 {selectedComponent === 'image' && <Image />}
                 {selectedComponent === 'size' && <Size />}
+                {selectedComponent === 'stock' && <Stock />}
             </Content>
         </Layout>
     );

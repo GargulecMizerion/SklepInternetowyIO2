@@ -104,7 +104,7 @@ const Size = () => {
                     <DetailsCard style={{ position: 'relative' }}>
                         <h3 style={{ size: '#f326be', marginBottom: '16px' }}>Size Details</h3>
                         <DetailItem><span>ID:</span> {searchedSize.id}</DetailItem>
-                        <DetailItem><span>Size:</span> {searchedSize.size}</DetailItem>
+                        <DetailItem><span>Size:</span> {searchedSize.sizeValue}</DetailItem>
                         <DetailItem>
                             <span>Category:</span> {searchedSize.category ? searchedSize.category.name : 'No category'}
                         </DetailItem>
